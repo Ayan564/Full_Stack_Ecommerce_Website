@@ -6,6 +6,8 @@ import {
   loginUser,
   logoutUser,
   getAllUsers,
+  getCurrentUserProfile,
+  updateCurrentUserProfile,
 } from "../controllers/userController.js";
 // Importing authentication and authorization middleware
 import {
@@ -23,5 +25,10 @@ router
   .get(authentication, authorizeAdmin, getAllUsers); // Route for fetching all users, accessible only to admin users
 router.post("/login", loginUser); // Route for user login
 router.post("/logout", logoutUser); // Route for user logout
+
+router
+  .route("/profile")
+  .get(authentication, getCurrentUserProfile)
+  .put(authentication, updateCurrentUserProfile); // Route for fetching and updating user profile, accessible only to authenticated users
 
 export default router; // Exporting the router for use in other modules
