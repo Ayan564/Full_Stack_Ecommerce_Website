@@ -218,38 +218,81 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * Deletes a user by their ID.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - JSON response indicating success or failure.
+ */
 const deleteUserById = asyncHandler(async (req, res) => {
+  // Find the user by ID
   const user = await User.findById(req.params.id);
+
+  // Check if the user exists
   if (user) {
+    // Check if the user is an admin
     if (user.isAdmin) {
-      res.status(400);
+      res.status(400); // Bad Request
       throw new Error("You cannot delete an admin user");
     }
+
+    // Delete the user from the database
     await User.deleteOne({ _id: user._id });
+
+    // Respond with success message
     res.json({ message: "User removed" });
   } else {
+    // If user not found, respond with 404 Not Found error
     res.status(404);
     throw new Error("User not found");
   }
 });
 
+/**
+ * Retrieves a user by their ID, excluding their password field.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - JSON response containing the user's details or an error message.
+ */
 const getUserById = asyncHandler(async (req, res) => {
+  // Find the user by ID and exclude the password field
   const user = await User.findById(req.params.id).select("-password");
+
+  // Check if the user exists
   if (user) {
+    // Respond with the user details
     res.json(user);
   } else {
+    // If user not found, respond with 404 Not Found error
     res.status(404);
     throw new Error("User not found");
   }
 });
 
+/**
+ * Updates a user's details by their ID.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - JSON response containing the updated user's details or an error message.
+ */
 const updateUserById = asyncHandler(async (req, res) => {
+  // Find the user by ID
   const user = await User.findById(req.params.id);
+
+  // Check if the user exists
   if (user) {
+    // Update user details with request body data or keep existing values if not provided
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     user.isAdmin = Boolean(req.body.isAdmin);
+
+    // Save the updated user to the database
     const updatedUser = await user.save();
+
+    // Respond with the updated user details
     res.json({
       _id: updatedUser._id,
       username: updatedUser.username,
@@ -257,6 +300,7 @@ const updateUserById = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
     });
   } else {
+    // If user not found, respond with 404 Not Found error
     res.status(404);
     throw new Error("User not found");
   }

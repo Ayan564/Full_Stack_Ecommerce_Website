@@ -2,20 +2,20 @@
 import express from "express";
 // Importing controller functions
 import {
-  createUser,
-  loginUser,
-  logoutUser,
-  getAllUsers,
-  getCurrentUserProfile,
-  updateCurrentUserProfile,
+  createUser, // Controller function to create a new user
+  loginUser, // Controller function to authenticate a user
+  logoutUser, // Controller function to logout a user
+  getAllUsers, // Controller function to fetch all users
+  getCurrentUserProfile, // Controller function to fetch the current user's profile
+  updateCurrentUserProfile, // Controller function to update the current user's profile
   deleteUserById, // Controller function to delete a user by ID
   getUserById, // Controller function to fetch a user by ID
   updateUserById, // Controller function to update a user by ID
 } from "../controllers/userController.js";
 // Importing authentication and authorization middleware
 import {
-  authentication,
-  authorizeAdmin,
+  authentication, // Middleware to authenticate a user
+  authorizeAdmin, // Middleware to authorize an admin user
 } from "../middlewares/authMiddleware.js";
 
 // Creating an instance of Express Router
