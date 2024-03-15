@@ -8,6 +8,9 @@ import {
   getAllUsers,
   getCurrentUserProfile,
   updateCurrentUserProfile,
+  deleteUserById, // Controller function to delete a user by ID
+  getUserById, // Controller function to fetch a user by ID
+  updateUserById, // Controller function to update a user by ID
 } from "../controllers/userController.js";
 // Importing authentication and authorization middleware
 import {
@@ -30,5 +33,11 @@ router
   .route("/profile")
   .get(authentication, getCurrentUserProfile)
   .put(authentication, updateCurrentUserProfile); // Route for fetching and updating user profile, accessible only to authenticated users
+
+router
+  .route("/:id")
+  .delete(authentication, authorizeAdmin, deleteUserById)
+  .get(authentication, authorizeAdmin, getUserById)
+  .put(authentication, authorizeAdmin, updateUserById); // Route for fetching and updating user by ID, accessible only to admin users
 
 export default router; // Exporting the router for use in other modules
