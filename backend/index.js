@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser"; // Importing cookie-parser middleware 
 import connectDB from "./config/db.js"; // Importing function to connect to MongoDB database
 import userRoutes from "./routes/userRoutes.js"; // Importing user routes
 import categoryRoutes from "./routes/categoryRoutes.js"; // Importing category routes
+import productRoutes from "./routes/productRoutes.js"; // Importing product routes
+import uploadRoutes from "./routes/uploadRoutes.js"; // Importing upload routes
 
 // Load environment variables from .env file into process.env
 dotenv.config();
@@ -34,6 +36,13 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 
 app.use("/api/category", categoryRoutes);
+
+app.use("/api/products", productRoutes);
+
+app.use("/api/upload", uploadRoutes);
+
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
 
 // Start the server and listen on the defined port
 app.listen(port, () => console.log(`Server running on port: ${port}`));
