@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser"; // Importing cookie-parser middleware 
 // Importing utility functions
 import connectDB from "./config/db.js"; // Importing function to connect to MongoDB database
 import userRoutes from "./routes/userRoutes.js"; // Importing user routes
+import categoryRoutes from "./routes/categoryRoutes.js"; // Importing category routes
 
 // Load environment variables from .env file into process.env
 dotenv.config();
@@ -31,6 +32,8 @@ app.use(cookieParser());
 
 // Route middleware: Direct requests starting with "/api/users" to userRoutes
 app.use("/api/users", userRoutes);
+
+app.use("/api/category", categoryRoutes);
 
 // Start the server and listen on the defined port
 app.listen(port, () => console.log(`Server running on port: ${port}`));
