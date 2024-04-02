@@ -63,7 +63,7 @@ const AdminProductUpdate = () => {
       toast.success("Item added successfully");
       setImage(res.image);
     } catch (err) {
-      toast.success("Item added successfully");
+      toast.error("Error adding item: " + err.message);
     }
   };
 
