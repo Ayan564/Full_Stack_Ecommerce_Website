@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const favoriteSlice = createSlice({
   name: "favorites",
-  initialState: {},
+  initialState: [],
   reducers: {
     addToFavorites: (state, action) => {
       // Checkif the product is not already favorites
