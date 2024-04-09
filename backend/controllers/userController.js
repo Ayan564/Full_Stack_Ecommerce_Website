@@ -1,15 +1,23 @@
+/*
+  UserController.js
+  Description: This module contains controller functions for user authentication and management.
+*/
+
 // Importing User model
 import User from "../models/userModel.js";
+
 // Importing asyncHandler middleware
 import asyncHandler from "../middlewares/asyncHandler.js";
+
 // Importing bcrypt for password hashing
 import bcrypt from "bcryptjs";
+
 // Importing function to create JWT tokens
 import createToken from "../utils/createToken.js";
 
 /**
  * createUser:
- * This function handles the creation of a new user.
+ * Description: Handles the creation of a new user.
  * It extracts username, email, and password from the request body,
  * checks if all required fields are provided, and validates whether
  * a user with the same email already exists in the database.
@@ -65,7 +73,7 @@ const createUser = asyncHandler(async (req, res) => {
 
 /**
  * loginUser:
- * This function handles the login process for a user.
+ * Description: Handles the login process for a user.
  * It extracts email and password from the request body,
  * checks if both are provided, and searches for a user with the provided email.
  * If the user exists, it compares the provided password with the hashed password
@@ -112,7 +120,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 /**
  * logoutUser:
- * This function handles the logout process for a user.
+ * Description: Handles the logout process for a user.
  * It clears the JWT cookie by setting it to an empty string
  * and expires it immediately by setting the expiry date to the past.
  * Finally, it responds with a success message.
@@ -133,7 +141,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 /**
  * getAllUsers:
- * This function retrieves all users from the database.
+ * Description: Retrieves all users from the database.
  * It finds all user documents in the User collection and sends them back as a response.
  *
  * @param {Object} req - The request object.
@@ -149,7 +157,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 /**
  * getCurrentUserProfile:
- * This function retrieves the profile information of the currently authenticated user.
+ * Description: Retrieves the profile information of the currently authenticated user.
  * It finds the user document in the User collection using the user ID from the request object.
  * If the user is found, it responds with the user's profile information.
  * If the user is not found, it responds with a 404 status and throws an error.
@@ -178,7 +186,7 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
 
 /**
  * updateCurrentUserProfile:
- * This function updates the profile information of the currently authenticated user.
+ * Description: Updates the profile information of the currently authenticated user.
  * It finds the user document in the User collection using the user ID from the request object.
  * If the user is found, it updates the user's username, email, and password (if provided) based on the request body.
  * After updating, it saves the changes to the database and responds with the updated user's information.
@@ -219,11 +227,15 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
 });
 
 /**
- * Deletes a user by their ID.
+ * deleteUserById:
+ * Description: Deletes a user by their ID.
+ * If the user is found, it checks if the user is an admin. If yes, it responds with a 400 Bad Request.
+ * If the user is not an admin, it deletes the user from the database and responds with a success message.
+ * If the user is not found, it responds with a 404 Not Found error.
  *
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @returns {Object} - JSON response indicating success or failure.
+ * @param {Object} req - The request object containing user ID in the req.params.id field.
+ * @param {Object} res - The response object to send back the success message or error.
+ * @returns {JSON} - JSON response indicating success or failure.
  */
 const deleteUserById = asyncHandler(async (req, res) => {
   // Find the user by ID
@@ -250,11 +262,14 @@ const deleteUserById = asyncHandler(async (req, res) => {
 });
 
 /**
- * Retrieves a user by their ID, excluding their password field.
+ * getUserById:
+ * Description: Retrieves a user by their ID, excluding their password field.
+ * If the user is found, it responds with the user's details.
+ * If the user is not found, it responds with a 404 Not Found error.
  *
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @returns {Object} - JSON response containing the user's details or an error message.
+ * @param {Object} req - The request object containing user ID in the req.params.id field.
+ * @param {Object} res - The response object to send back the user's details or error.
+ * @returns {JSON} - JSON response containing the user's details or an error message.
  */
 const getUserById = asyncHandler(async (req, res) => {
   // Find the user by ID and exclude the password field
@@ -272,11 +287,14 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 
 /**
- * Updates a user's details by their ID.
+ * updateUserById:
+ * Description: Updates a user's details by their ID.
+ * If the user is found, it updates the user's details based on the request body.
+ * If the user is not found, it responds with a 404 Not Found error.
  *
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @returns {Object} - JSON response containing the updated user's details or an error message.
+ * @param {Object} req - The request object containing user ID in the req.params.id field and updated user details in the req.body.
+ * @param {Object} res - The response object to send back the updated user's details or error.
+ * @returns {JSON} - JSON response containing the updated user's details or an error message.
  */
 const updateUserById = asyncHandler(async (req, res) => {
   // Find the user by ID

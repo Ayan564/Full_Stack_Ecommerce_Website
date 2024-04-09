@@ -1,6 +1,11 @@
-import mongoose from "mongoose";
-const { ObjectId } = mongoose.Schema;
+/*
+  productModel.js
+  Description: Defines the schemas for the Product and Review models and exports the Product model.
+*/
 
+import mongoose from "mongoose";
+
+// Define the schema for the Review model
 const reviewSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -15,15 +20,20 @@ const reviewSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+// Define the schema for the Product model
 const productSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
     image: { type: String, required: true },
     brand: { type: String, required: true },
     quantity: { type: Number, required: true },
-    category: { type: ObjectId, ref: "Category", required: true },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
     description: { type: String, required: true },
-    reviews: [reviewSchema],
+    reviews: [reviewSchema], // Embedding reviewSchema in productSchema
     rating: { type: Number, required: true, default: 0 },
     numReviews: { type: Number, required: true, default: 0 },
     price: { type: Number, required: true, default: 0 },
@@ -32,5 +42,6 @@ const productSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+// Create the Product model based on the schema
 const Product = mongoose.model("Product", productSchema);
 export default Product;

@@ -1,5 +1,11 @@
+/*
+  orderModel.js
+  Description: Defines the schema for the Order model and exports the model.
+*/
+
 import mongoose from "mongoose";
 
+// Define the schema for the Order model
 const orderSchema = mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
@@ -85,5 +91,6 @@ const orderSchema = mongoose.Schema(
   }
 );
 
+// Create the Order model based on the schema
 const Order = mongoose.model("Order", orderSchema);
 export default Order;
