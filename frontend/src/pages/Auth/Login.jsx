@@ -7,33 +7,43 @@ import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
 
 const Login = () => {
+  // State variables for email and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Redux hooks for dispatch and accessing user info from the store
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [login, { isLoading }] = useLoginMutation();
   const { userInfo } = useSelector((state) => state.auth);
 
+  // React router hooks for location and navigation
+  const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
 
+  // Login mutation hook from Redux Toolkit Query
+  const [login, { isLoading }] = useLoginMutation();
+
+  // Effect to redirect if user info is available
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
     }
   }, [navigate, redirect, userInfo]);
 
+  // Function to handle form submission
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      // Call login mutation and unwrap the result
       const res = await login({ email, password }).unwrap();
       console.log(res);
+      // Dispatch action to set user credentials in the store
       dispatch(setCredentials({ ...res }));
+      // Redirect to the specified location after successful login
       navigate(redirect);
     } catch (err) {
+      // Display error message if login fails
       toast.error(err?.data?.message || err.error);
     }
   };
@@ -86,10 +96,11 @@ const Login = () => {
               {isLoading ? "Signing In..." : "Sign In"}
             </button>
 
+            {/* Loader component to display when signing in */}
             {isLoading && <Loader />}
           </form>
           <div className="mt-4">
-            <p className="text-black">
+            <p className="text-white">
               New Customer?{" "}
               <Link
                 to={redirect ? `/register?redirect=${redirect}` : "/register"}
@@ -100,13 +111,15 @@ const Login = () => {
             </p>
           </div>
         </div>
+        {/* Image */}
         <img
           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
           alt=""
-          className="h-[41rem] w-[48%] xl:block md:hidden sm:hidden rounded-lg"
+          className="h-[65rem] w-[59%] xl:block md:hidden sm:hidden rounded-lg"
         />
       </section>
     </div>
   );
 };
+
 export default Login;

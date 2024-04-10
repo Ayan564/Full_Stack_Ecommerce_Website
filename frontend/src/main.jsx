@@ -43,6 +43,9 @@ import Cart from "./pages/Cart.jsx"; // Cart component
 // Importing shop-related components
 import Shop from "./pages/Shop.jsx"; // Shop component
 
+// Importing userOrder-related components
+import UserOrder from "./pages/User/UserOrder.jsx"; // UserOrder component
+
 // Importing order-related components
 import Shipping from "./pages/Orders/Shipping.jsx"; // Shipping component
 import PlaceOrder from "./pages/Orders/PlaceOrder.jsx"; // PlaceOrder component
@@ -64,6 +67,7 @@ const router = createBrowserRouter(
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/shop" element={<Shop />} />
+      <Route path="/user-orders" element={<UserOrder />} />
 
       {/* Protected routes (require authentication) */}
       <Route path="" element={<PrivateRoute />}>

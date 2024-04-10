@@ -30,7 +30,7 @@ const Cart = () => {
 
   return (
     <>
-      <div className="container flex justify-around items-start flex wrap mx-auto mt-8">
+      <div className="container flex justify-around items-start flex-wrap mx-auto mt-8">
         {/* Conditionally render cart items or empty cart message */}
         {cartItems.length === 0 ? (
           <div>

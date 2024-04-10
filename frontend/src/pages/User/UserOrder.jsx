@@ -41,11 +41,13 @@ const UserOrder = () => {
             {orders.map((order) => (
               <tr key={order._id}>
                 {/* Order image */}
-                <img
-                  src={order.orderItems[0].image}
-                  alt={order.user}
-                  className="w-[6rem] mb-5"
-                />
+                <td>
+                  <img
+                    src={order.orderItems[0].image}
+                    alt={order.user}
+                    className="w-[6rem] mb-5"
+                  />
+                </td>
 
                 {/* Order details */}
                 <td className="py-2">{order._id}</td>

@@ -1,86 +1,119 @@
-import { useState } from "react";
+import { useState } from "react"; // Importing useState hook from React for managing component state
 import {
   AiOutlineHome,
   AiOutlineShopping,
   AiOutlineLogin,
   AiOutlineUserAdd,
   AiOutlineShoppingCart,
-} from "react-icons/ai";
-import { FaHeart } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import "./Navigation.css";
-import { useSelector, useDispatch } from "react-redux";
-import { useLogoutMutation } from "../../redux/api/usersApiSlice";
-import { logout } from "../../redux/features/auth/authSlice";
+} from "react-icons/ai"; // Importing required icons from React Icons library
+import { FaHeart } from "react-icons/fa"; // Importing heart icon from React Icons library
+import { Link } from "react-router-dom"; // Importing Link component from React Router for navigation
+import { useNavigate } from "react-router-dom"; // Importing useNavigate hook from React Router for programmatic navigation
+import "./Navigation.css"; // Importing CSS file for styling the navigation component
+import { useSelector, useDispatch } from "react-redux"; // Importing Redux hooks for accessing state and dispatching actions
+import { useLogoutMutation } from "../../redux/api/usersApiSlice"; // Importing logout mutation hook from Redux API slice
+import { logout } from "../../redux/features/auth/authSlice"; // Importing logout action from authSlice
+import FavoritesCount from "../Products/FavoritesCount"; // Importing FavoritesCount component
 
+// Define the Navigation component
 const Navigation = () => {
+  // Retrieve user info and cart items from Redux store
   const { userInfo } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
+
+  // Define state variables for dropdown and sidebar visibility
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
 
+  // Function to toggle the dropdown menu
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  // Define dispatch function for Redux actions and navigate function for programmatic navigation
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Use logout mutation hook from Redux API slice
   const [logoutApiCall] = useLogoutMutation();
 
+  // Function to handle logout action
   const logoutHandler = async () => {
     try {
+      // Perform logout API call and dispatch logout action
       await logoutApiCall().unwrap();
       dispatch(logout());
+      // Navigate to login page after successful logout
       navigate("/login");
     } catch (error) {
-      console.log(error);
+      // Log any errors that occur during logout process
+      console.error(error);
     }
   };
 
+  // Render the navigation component
   return (
     <div
-      style={{ zIndex: 999 }}
+      style={{ zIndex: 9999 }}
       className={`${
         showSidebar ? "hidden" : "flex"
-      } xl:flex lg:flex md:hidden sm:hidden flex-col justify-between p-4 text-white bg-black w-[4%] hover:w-[15%] h-[100vh] fixed`}
+      } xl:flex lg:flex md:hidden sm:hidden flex-col justify-between p-4 text-white bg-[#000] w-[4%] hover:w-[15%] h-[100vh]  fixed `}
       id="navigation-container"
     >
       <div className="flex flex-col justify-center space-y-4">
+        {/* Link to Home page */}
         <Link
           to="/"
-          className="flex items-center transition-tranform transform hover:translate-x-2"
+          className="flex items-center transition-transform transform hover:translate-x-2"
         >
           <AiOutlineHome className="mr-2 mt-[3rem]" size={26} />
-          <span className="hidden nav-item-name mt-[3rem]">Home</span>{" "}
+          <span className="hidden nav-item-name mt-[3rem]">HOME</span>{" "}
         </Link>
+
+        {/* Link to Shop page */}
         <Link
           to="/shop"
-          className="flex items-center transition-tranform transform hover:translate-x-2"
+          className="flex items-center transition-transform transform hover:translate-x-2"
         >
           <AiOutlineShopping className="mr-2 mt-[3rem]" size={26} />
-          <span className="hidden nav-item-name mt-[3rem]">Shop</span>{" "}
+          <span className="hidden nav-item-name mt-[3rem]">SHOP</span>{" "}
         </Link>
-        <Link
-          to="/cart"
-          className="flex items-center transition-tranform transform hover:translate-x-2"
-        >
-          <AiOutlineShoppingCart className="mr-2 mt-[3rem]" size={26} />
-          <span className="hidden nav-item-name mt-[3rem]">Cart</span>{" "}
+
+        {/* Link to Cart page with dynamic badge for item count */}
+        <Link to="/cart" className="flex relative">
+          <div className="flex items-center transition-transform transform hover:translate-x-2">
+            <AiOutlineShoppingCart className="mt-[3rem] mr-2" size={26} />
+            <span className="hidden nav-item-name mt-[3rem]">Cart</span>{" "}
+          </div>
+
+          <div className="absolute top-9">
+            {cartItems.length > 0 && (
+              <span>
+                <span className="px-1 py-0 text-sm text-white bg-pink-500 rounded-full">
+                  {cartItems.reduce((a, c) => a + c.qty, 0)}
+                </span>
+              </span>
+            )}
+          </div>
         </Link>
-        <Link
-          to="/favorite"
-          className="flex items-center transition-tranform transform hover:translate-x-2"
-        >
-          <FaHeart className="mr-2 mt-[3rem]" size={26} />
-          <span className="hidden nav-item-name mt-[3rem]">Favorite</span>{" "}
+
+        {/* Link to Favorites page with FavoritesCount component */}
+        <Link to="/favorite" className="flex relative">
+          <div className="flex justify-center items-center transition-transform transform hover:translate-x-2">
+            <FaHeart className="mt-[3rem] mr-2" size={20} />
+            <span className="hidden nav-item-name mt-[3rem]">
+              Favorites
+            </span>{" "}
+            <FavoritesCount />
+          </div>
         </Link>
       </div>
 
       <div className="relative">
+        {/* Dropdown button for user options */}
         <button
           onClick={toggleDropdown}
-          className="flex items-center text-gray-8000 focus:outline-none"
+          className="flex items-center text-gray-800 focus:outline-none"
         >
           {userInfo ? (
             <span className="text-white">{userInfo.username}</span>
@@ -90,7 +123,7 @@ const Navigation = () => {
           {userInfo && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className={`h-4 w-4 ml-3 ${
+              className={`h-4 w-4 ml-1 ${
                 dropdownOpen ? "transform rotate-180" : ""
               }`}
               fill="none"
@@ -106,14 +139,17 @@ const Navigation = () => {
             </svg>
           )}
         </button>
+
+        {/* Dropdown menu for user options */}
         {dropdownOpen && userInfo && (
           <ul
-            className={`absolute right-0 mt-2 mr-5 space-y-2 bg-white text-gray-600 ${
+            className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${
               !userInfo.isAdmin ? "-top-20" : "-top-80"
             } `}
           >
             {userInfo.isAdmin && (
               <>
+                {/* Link to Admin Dashboard */}
                 <li>
                   <Link
                     to="/admin/dashboard"
@@ -122,6 +158,7 @@ const Navigation = () => {
                     Dashboard
                   </Link>
                 </li>
+                {/* Link to Admin Product List */}
                 <li>
                   <Link
                     to="/admin/productlist"
@@ -130,6 +167,7 @@ const Navigation = () => {
                     Products
                   </Link>
                 </li>
+                {/* Link to Admin Category List */}
                 <li>
                   <Link
                     to="/admin/categorylist"
@@ -138,6 +176,7 @@ const Navigation = () => {
                     Category
                   </Link>
                 </li>
+                {/* Link to Admin Order List */}
                 <li>
                   <Link
                     to="/admin/orderlist"
@@ -146,6 +185,7 @@ const Navigation = () => {
                     Orders
                   </Link>
                 </li>
+                {/* Link to Admin User List */}
                 <li>
                   <Link
                     to="/admin/userlist"
@@ -157,11 +197,13 @@ const Navigation = () => {
               </>
             )}
 
+            {/* Link to User Profile */}
             <li>
               <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">
                 Profile
               </Link>
             </li>
+            {/* Button to trigger logout */}
             <li>
               <button
                 onClick={logoutHandler}
@@ -172,28 +214,27 @@ const Navigation = () => {
             </li>
           </ul>
         )}
+        {/* Conditional rendering for authentication links */}
         {!userInfo && (
           <ul>
+            {/* Link to Login page */}
             <li>
               <Link
                 to="/login"
-                className="flex items-center transition-tranform transform hover:translate-x-2"
+                className="flex items-center mt-5 transition-transform transform hover:translate-x-2"
               >
-                <AiOutlineLogin className="mr-2 mt-[3rem]" size={26} />
-                <span className="hidden nav-item-name mt-[3rem]">
-                  Login
-                </span>{" "}
+                <AiOutlineLogin className="mr-2 mt-[4px]" size={26} />
+                <span className="hidden nav-item-name">LOGIN</span>
               </Link>
             </li>
+            {/* Link to Register page */}
             <li>
               <Link
                 to="/register"
-                className="flex items-center transition-tranform transform hover:translate-x-2"
+                className="flex items-center mt-5 transition-transform transform hover:translate-x-2"
               >
-                <AiOutlineUserAdd className="mr-2 mt-[3rem]" size={26} />
-                <span className="hidden nav-item-name mt-[3rem]">
-                  Register
-                </span>{" "}
+                <AiOutlineUserAdd size={26} />
+                <span className="hidden nav-item-name">REGISTER</span>
               </Link>
             </li>
           </ul>
@@ -203,4 +244,5 @@ const Navigation = () => {
   );
 };
 
-export default Navigation; // Exporting as default export
+// Export the Navigation component as the default export
+export default Navigation;
