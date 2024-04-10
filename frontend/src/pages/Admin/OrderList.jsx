@@ -40,6 +40,7 @@ const OrderList = () => {
             {/* Mapping through orders and rendering a row for each */}
             {orders.map((order) => (
               <tr key={order._id}>
+                {/* Rendering order details */}
                 <td>
                   <img
                     src={order.orderItems[0].image}
@@ -48,16 +49,12 @@ const OrderList = () => {
                   />
                 </td>
                 <td>{order._id}</td>
-
                 <td>{order.user ? order.user.username : "N/A"}</td>
-
                 <td>
                   {/* Displaying order creation date */}
                   {order.createdAt ? order.createdAt.substring(0, 10) : "N/A"}
                 </td>
-
                 <td>$ {order.totalPrice}</td>
-
                 {/* Conditional rendering for paid status */}
                 <td className="py-2">
                   {order.isPaid ? (
@@ -70,7 +67,6 @@ const OrderList = () => {
                     </p>
                   )}
                 </td>
-
                 {/* Conditional rendering for delivered status */}
                 <td className="px-2 py-2">
                   {order.isDelivered ? (
@@ -83,7 +79,6 @@ const OrderList = () => {
                     </p>
                   )}
                 </td>
-
                 {/* Link to view order details */}
                 <td>
                   <Link to={`/order/${order._id}`}>

@@ -54,6 +54,7 @@ import OrderList from "./pages/Admin/OrderList.jsx"; // OrderList component
 
 // Importing PayPalScriptProvider for integrating PayPal
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 
 // Create routes using React Router
 const router = createBrowserRouter(
@@ -85,6 +86,7 @@ const router = createBrowserRouter(
         <Route path="allproductslist" element={<AllProducts />} />
         <Route path="product/update/:_id" element={<ProductUpdate />} />
         <Route path="orderlist" element={<OrderList />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
       </Route>
     </Route>
   )
