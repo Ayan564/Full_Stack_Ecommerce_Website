@@ -3,21 +3,27 @@ import moment from "moment";
 import { useAllProductsQuery } from "../../redux/api/productApiSlice";
 import AdminMenu from "./AdminMenu";
 
+// Component for rendering all products in the admin panel
 const AllProducts = () => {
+  // Query products using the custom hook provided by RTK Query
   const { data: products, isLoading, isError } = useAllProductsQuery();
 
+  // Display loading state while fetching data
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
+  // Display error message if fetching data fails
   if (isError) {
     return <div>Error loading products</div>;
   }
 
+  // Render the list of products
   return (
     <>
       <div className="container mx-[9rem]">
         <div className="flex flex-col  md:flex-row">
+          {/* Product list */}
           <div className="p-3">
             <div className="ml-[2rem] text-xl font-bold h-12">
               All Products ({products.length})
@@ -40,16 +46,13 @@ const AllProducts = () => {
                         <h5 className="text-xl font-semibold mb-2">
                           {product?.name}
                         </h5>
-
                         <p className="text-gray-400 text-xs">
                           {moment(product.createdAt).format("MMMM Do YYYY")}
                         </p>
                       </div>
-
                       <p className="text-gray-400 xl:w-[30rem] lg:w-[30rem] md:w-[20rem] sm:w-[10rem] text-sm mb-4">
                         {product?.description?.substring(0, 160)}...
                       </p>
-
                       <div className="flex justify-between">
                         <Link
                           to={`/admin/product/update/${product._id}`}
@@ -80,6 +83,7 @@ const AllProducts = () => {
               ))}
             </div>
           </div>
+          {/* Admin menu */}
           <div className="md:w-1/4 p-3 mt-2">
             <AdminMenu />
           </div>

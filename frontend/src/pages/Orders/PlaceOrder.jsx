@@ -8,23 +8,31 @@ import Loader from "../../components/Loader";
 import { useCreateOrderMutation } from "../../redux/api/orderApiSlice";
 import { clearCartItems } from "../../redux/features/cart/cartSlice";
 
+// PlaceOrder component to display order details and handle placing orders
 const PlaceOrder = () => {
+  // React Router navigate hook
   const navigate = useNavigate();
 
+  // Redux selector to get cart state
   const cart = useSelector((state) => state.cart);
 
+  // Mutation hook for creating order
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
+  // Effect to check if shipping address is set, if not, redirect to shipping page
   useEffect(() => {
     if (!cart.shippingAddress.address) {
       navigate("/shipping");
     }
   }, [cart.paymentMethod, cart.shippingAddress.address, navigate]);
 
+  // Redux dispatch function
   const dispatch = useDispatch();
 
+  // Function to handle placing order
   const placeOrderHandler = async () => {
     try {
+      // Call createOrder mutation
       const res = await createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
@@ -34,18 +42,25 @@ const PlaceOrder = () => {
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
       }).unwrap();
+
+      // Clear cart items after placing order
       dispatch(clearCartItems());
+
+      // Navigate to order details page
       navigate(`/order/${res._id}`);
     } catch (error) {
+      // Display error message if placing order fails
       toast.error(error);
     }
   };
 
   return (
     <>
+      {/* Progress steps */}
       <ProgressSteps step1 step2 step3 />
 
       <div className="container mx-auto mt-8">
+        {/* Display cart items */}
         {cart.cartItems.length === 0 ? (
           <Message>Your cart is empty</Message>
         ) : (
@@ -60,7 +75,6 @@ const PlaceOrder = () => {
                   <td className="px-1 py-2 text-left">Total</td>
                 </tr>
               </thead>
-
               <tbody>
                 {cart.cartItems.map((item, index) => (
                   <tr key={index}>
@@ -71,7 +85,6 @@ const PlaceOrder = () => {
                         className="w-16 h-16 object-cover"
                       />
                     </td>
-
                     <td className="p-2">
                       <Link to={`/product/${item.product}`}>{item.name}</Link>
                     </td>
@@ -88,8 +101,10 @@ const PlaceOrder = () => {
         )}
 
         <div className="mt-8">
+          {/* Order summary */}
           <h2 className="text-2xl font-semibold mb-5">Order Summary</h2>
           <div className="flex justify-between flex-wrap p-8 bg-[#181818]">
+            {/* Display order summary details */}
             <ul className="text-lg">
               <li>
                 <span className="font-semibold mb-4">Items:</span> $
@@ -109,8 +124,10 @@ const PlaceOrder = () => {
               </li>
             </ul>
 
+            {/* Display error message if order creation fails */}
             {error && <Message variant="danger">{error.data.message}</Message>}
 
+            {/* Shipping details */}
             <div>
               <h2 className="text-2xl font-semibold mb-4">Shipping</h2>
               <p>
@@ -120,12 +137,14 @@ const PlaceOrder = () => {
               </p>
             </div>
 
+            {/* Payment method */}
             <div>
               <h2 className="text-2xl font-semibold mb-4">Payment Method</h2>
               <strong>Method:</strong> {cart.paymentMethod}
             </div>
           </div>
 
+          {/* Place order button */}
           <button
             type="button"
             className="bg-pink-500 text-white py-2 px-4 rounded-full text-lg w-full mt-4"
@@ -135,6 +154,7 @@ const PlaceOrder = () => {
             Place Order
           </button>
 
+          {/* Display loader while placing order */}
           {isLoading && <Loader />}
         </div>
       </div>

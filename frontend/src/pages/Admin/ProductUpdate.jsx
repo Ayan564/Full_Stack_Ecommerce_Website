@@ -10,13 +10,16 @@ import {
 import { useFetchCategoriesQuery } from "../../redux/api/categoryApiSlice";
 import { toast } from "react-toastify";
 
+// Component for updating and deleting a product in the admin panel
 const AdminProductUpdate = () => {
   const params = useParams();
 
+  // Fetching product data by ID using RTK Query
   const { data: productData } = useGetProductByIdQuery(params._id);
 
   console.log(productData);
 
+  // State variables for managing product data
   const [image, setImage] = useState(productData?.image || "");
   const [name, setName] = useState(productData?.name || "");
   const [description, setDescription] = useState(
@@ -28,20 +31,22 @@ const AdminProductUpdate = () => {
   const [brand, setBrand] = useState(productData?.brand || "");
   const [stock, setStock] = useState(productData?.countInStock);
 
-  // hook
+  // Hook for programmatic navigation
   const navigate = useNavigate();
 
   // Fetch categories using RTK Query
   const { data: categories = [] } = useFetchCategoriesQuery();
 
+  // Mutation hook for uploading product image
   const [uploadProductImage] = useUploadProductImageMutation();
 
-  // Define the update product mutation
+  // Mutation hook for updating product
   const [updateProduct] = useUpdateProductMutation();
 
-  // Define the delete product mutation
+  // Mutation hook for deleting product
   const [deleteProduct] = useDeleteProductMutation();
 
+  // Effect hook to update state when product data changes
   useEffect(() => {
     if (productData && productData._id) {
       setName(productData.name);
@@ -51,22 +56,29 @@ const AdminProductUpdate = () => {
       setQuantity(productData.quantity);
       setBrand(productData.brand);
       setImage(productData.image);
-      setStock(productData.countInStock);
     }
   }, [productData]);
 
+  // Handler function for uploading product image
   const uploadFileHandler = async (e) => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     try {
       const res = await uploadProductImage(formData).unwrap();
-      toast.success("Item added successfully");
+      toast.success("Item added successfully", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
       setImage(res.image);
     } catch (err) {
-      toast.error("Error adding item: " + err.message);
+      toast.error("Error adding item: " + err.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
     }
   };
 
+  // Handler function for submitting updated product data
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -84,17 +96,27 @@ const AdminProductUpdate = () => {
       const data = await updateProduct({ productId: params._id, formData });
 
       if (data?.error) {
-        toast.error(data.error);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+        });
       } else {
-        toast.success(`Product successfully updated`);
+        toast.success(`Product successfully updated`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+        });
         navigate("/admin/allproductslist");
       }
     } catch (err) {
       console.log(err);
-      toast.error("Product update failed. Try again.");
+      toast.error("Product update failed. Try again.", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
     }
   };
 
+  // Handler function for deleting product
   const handleDelete = async () => {
     try {
       let answer = window.confirm(
@@ -103,14 +125,21 @@ const AdminProductUpdate = () => {
       if (!answer) return;
 
       const { data } = await deleteProduct(params._id);
-      toast.success(`"${data.name}" is deleted`);
+      toast.success(`"${data.name}" is deleted`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
       navigate("/admin/allproductslist");
     } catch (err) {
       console.log(err);
-      toast.error("Delete failed. Try again.");
+      toast.error("Delete failed. Try again.", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+      });
     }
   };
 
+  // Render component
   return (
     <>
       <div className="container  xl:mx-[9rem] sm:mx-[0]">
@@ -119,18 +148,20 @@ const AdminProductUpdate = () => {
           <div className="md:w-3/4 p-3">
             <div className="h-12">Update / Delete Product</div>
 
+            {/* Display uploaded image */}
             {image && (
               <div className="text-center">
                 <img
                   src={image}
                   alt="product"
-                  className="block mx-auto max-h-[200px]"
+                  className="block mx-auto w-full h-[40%]"
                 />
               </div>
             )}
 
+            {/* Input for uploading product image */}
             <div className="mb-3">
-              <label className="border text-white px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
+              <label className="text-white  py-2 px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
                 {image ? image.name : "Upload image"}
                 <input
                   type="file"
@@ -142,6 +173,7 @@ const AdminProductUpdate = () => {
               </label>
             </div>
 
+            {/* Form inputs for product details */}
             <div className="p-3">
               <div className="flex flex-wrap">
                 <div className="one">
@@ -224,6 +256,7 @@ const AdminProductUpdate = () => {
                 </div>
               </div>
 
+              {/* Buttons for updating and deleting product */}
               <div className="">
                 <button
                   onClick={handleSubmit}

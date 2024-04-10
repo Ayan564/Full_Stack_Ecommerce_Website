@@ -1,47 +1,56 @@
 import { useEffect, useState } from "react";
 import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
-import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+import Message from "../../components/Message"; // Importing a custom message component
+import Loader from "../../components/Loader"; // Importing a custom loader component
 import {
   useDeleteUserMutation,
   useGetUsersQuery,
   useUpdateUserMutation,
-} from "../../redux/api/usersApiSlice";
-import { toast } from "react-toastify";
-import AdminMenu from "./AdminMenu";
+} from "../../redux/api/usersApiSlice"; // Importing hooks from Redux Toolkit Query for fetching, updating, and deleting user data
+import { toast } from "react-toastify"; // Importing toast notifications library
+import AdminMenu from "./AdminMenu"; // Importing AdminMenu component
 
+// Component for displaying and managing user list in the admin panel
 const UserList = () => {
+  // Fetch users data using RTK Query
   const { data: users, refetch, isLoading, error } = useGetUsersQuery();
 
+  // Mutation hook for deleting user
   const [deleteUser] = useDeleteUserMutation();
 
+  // State variables for managing editable user data
   const [editableUserId, setEditableUserId] = useState(null);
   const [editableUserName, setEditableUserName] = useState("");
   const [editableUserEmail, setEditableUserEmail] = useState("");
 
+  // Mutation hook for updating user
   const [updateUser] = useUpdateUserMutation();
 
+  // Effect hook to refetch users data when needed
   useEffect(() => {
     refetch();
   }, [refetch]);
 
+  // Handler function for deleting user
   const deleteHandler = async (id) => {
     if (window.confirm("Are you sure")) {
       try {
         await deleteUser(id);
         refetch();
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error(err?.data?.message || err.error); // Display error message using toast
       }
     }
   };
 
+  // Function to toggle edit mode for a user
   const toggleEdit = (id, username, email) => {
     setEditableUserId(id);
     setEditableUserName(username);
     setEditableUserEmail(email);
   };
 
+  // Handler function for updating user
   const updateHandler = async (id) => {
     try {
       await updateUser({
@@ -52,19 +61,21 @@ const UserList = () => {
       setEditableUserId(null);
       refetch();
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.data?.message || err.error); // Display error message using toast
     }
   };
 
+  // Render component
   return (
     <div className="p-4">
-      <AdminMenu />
+      <AdminMenu /> {/* Render AdminMenu component */}
       <h1 className="text-2xl font-semibold mb-4">Users</h1>
       {isLoading ? (
-        <Loader />
+        <Loader /> // Render loader if data is loading
       ) : error ? (
         <Message variant="danger">
-          {error?.data?.message || error.error}
+          {error?.data?.message || error.error}{" "}
+          {/* Render error message if there's an error */}
         </Message>
       ) : (
         <div className="flex flex-col md:flex-row">
