@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+// Import necessary components and libraries
+import React from "react";
 import moment from "moment";
 import { useAllProductsQuery } from "../../redux/api/productApiSlice";
 import AdminMenu from "./AdminMenu";
@@ -30,11 +31,16 @@ const AllProducts = () => {
             </div>
             <div className="flex flex-wrap justify-around items-center">
               {products.map((product) => (
-                <Link
+                // Use a <div> instead of nested <Link> component
+                <div
                   key={product._id}
-                  to={`/admin/product/update/${product._id}`}
                   className="block mb-4 overflow-hidden"
+                  onClick={() => {
+                    // Navigate to the product update page on click
+                    window.location.href = `/admin/product/update/${product._id}`;
+                  }}
                 >
+                  {/* Product details */}
                   <div className="flex">
                     <img
                       src={product.image}
@@ -54,9 +60,13 @@ const AllProducts = () => {
                         {product?.description?.substring(0, 160)}...
                       </p>
                       <div className="flex justify-between">
-                        <Link
-                          to={`/admin/product/update/${product._id}`}
+                        {/* Button to update product */}
+                        <button
                           className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-pink-700 rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent click from propagating to outer div
+                            window.location.href = `/admin/product/update/${product._id}`;
+                          }}
                         >
                           Update Product
                           <svg
@@ -74,12 +84,12 @@ const AllProducts = () => {
                               d="M1 5h12m0 0L9 1m4 4L9 9"
                             />
                           </svg>
-                        </Link>
+                        </button>
                         <p>$ {product?.price}</p>
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
