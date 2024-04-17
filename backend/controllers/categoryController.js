@@ -61,7 +61,7 @@ const updateCategory = asyncHandler(async (req, res) => {
 const removeCategory = asyncHandler(async (req, res) => {
   try {
     // Finding and removing the category by categoryId
-    const removed = await Category.findOneAndDelete(req.params.categoryId);
+    const removed = await Category.findByIdAndDelete(req.params.categoryId);
     res.json(removed); // Returning the removed category
   } catch (error) {
     console.error(error); // Logging any errors

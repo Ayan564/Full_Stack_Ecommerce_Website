@@ -109,14 +109,10 @@ const Shop = () => {
                   <div className="flex ietms-center mr-4">
                     <input
                       type="checkbox"
-                      id="red-checkbox"
                       onChange={(e) => handleCheck(e.target.checked, c._id)}
-                      className="w-4 h-4 text-pink-600 bg-gray-100 border-gray-300 rounded focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      className="w-4 h-4 accent-pink-600 bg-gray-100  border-gray-400 rounded-lg focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
-                    <label
-                      htmlFor="pink-checkbox"
-                      className="ml-2 text-sm font-medium text-white dark:text-gray-300"
-                    >
+                    <label className="ml-2 text-sm font-medium text-white dark:text-gray-300">
                       {c.name}
                     </label>
                   </div>
@@ -135,7 +131,7 @@ const Shop = () => {
                     id={brand}
                     name="brand"
                     onChange={() => handleBrandClick(brand)}
-                    className="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-4 h-4 accent-pink-600 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <label
                     htmlFor="pink-radio"
