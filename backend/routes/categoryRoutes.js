@@ -20,7 +20,9 @@ import {
 const router = express.Router();
 
 // Route to create a new category (POST /api/categories)
-router.route("/").post(authentication, authorizeAdmin, createCategory);
+router
+  .route("/")
+  .post(authentication, authorizeAdmin, createCategory);
 
 // Route to update an existing category (PUT /api/categories/:categoryId)
 router
