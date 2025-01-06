@@ -3,6 +3,7 @@ import path from "path"; // Importing path module for working with file paths
 import express from "express"; // Importing express framework for creating server
 import dotenv from "dotenv"; // Importing dotenv for loading environment variables
 import cookieParser from "cookie-parser"; // Importing cookie-parser middleware for parsing cookies
+import cors from "cors"; // Importing CORS middleware
 
 // Importing utility functions
 import connectDB from "./config/db.js"; // Importing function to connect to MongoDB database
@@ -23,6 +24,29 @@ connectDB();
 
 // Create an instance of Express application
 const app = express();
+
+// Set up CORS middleware
+const allowedOrigins = [
+  "https://full-stack-ecommerce-website-frontend.onrender.com", // Your frontend URL
+];
+
+// Configure CORS options
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // Allow requests with no origin (e.g., mobile apps)
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(
+        new Error("CORS policy does not allow access from this origin"),
+        false
+      );
+    }
+    callback(null, true); // Allow the request
+  },
+  credentials: true, // Allow cookies or authentication tokens if needed
+};
+
+// Use CORS middleware with the defined options
+app.use(cors(corsOptions));
 
 // Middleware to parse JSON bodies of incoming requests
 app.use(express.json());
