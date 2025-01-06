@@ -11,7 +11,7 @@ const Home = () => {
   const { keyword } = useParams();
 
   // Fetch products based on the keyword using an API query
-  const { data, isLoading, isError } = useGetProductsQuery({ keyword });
+  const { data, isLoading, isError, error } = useGetProductsQuery({ keyword });
 
   return (
     <>
@@ -25,7 +25,9 @@ const Home = () => {
       ) : isError ? (
         // Display an error message if there's an error fetching data
         <Message variant="danger">
-          {isError?.data.message || isError.error}
+          {error?.data?.message ||
+            error?.error ||
+            "An unexpected error occurred"}
         </Message>
       ) : (
         // Render the special products if data is successfully fetched
