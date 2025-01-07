@@ -27,7 +27,7 @@ const app = express();
 
 // Set up CORS middleware
 const allowedOrigins = [
-  "https://full-stack-ecommerce-website-frontend.onrender.com", // Your frontend URL
+  "http://localhost:5173", // Your frontend URL
 ];
 
 // Configure CORS options
