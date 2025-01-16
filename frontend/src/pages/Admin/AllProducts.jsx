@@ -29,7 +29,7 @@ const AllProducts = () => {
             <div className="ml-[2rem] text-xl font-bold h-12">
               All Products ({products.length})
             </div>
-            <div className="flex flex-wrap justify-around items-center">
+            <div className="flex flex-wrap items-center">
               {products.map((product) => (
                 // Use a <div> instead of nested <Link> component
                 <div

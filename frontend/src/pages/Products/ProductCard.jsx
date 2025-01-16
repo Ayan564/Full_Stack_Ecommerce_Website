@@ -13,10 +13,7 @@ const ProductCard = ({ p }) => {
   const addToCartHandler = (product, qty) => {
     dispatch(addToCart({ ...product, qty })); // Dispatching action to add the product to the cart in the Redux store
     // Displaying a success notification
-    toast.success("Item added successfully", {
-      position: toast.POSITION.TOP_RIGHT, // Notification position
-      autoClose: 2000, // Auto close after 2000 milliseconds (2 seconds)
-    });
+    toast.success("Item added successfully");
   };
 
   // Rendering the product card
