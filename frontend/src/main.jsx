@@ -19,7 +19,7 @@ import AdminRoute from "./pages/Admin/AdminRoute"; // For admin routes
 
 // Importing authentication-related components
 import Login from "./pages/Auth/Login.jsx"; // Login component
-import Register from "./pages/Auth/Resister.jsx"; // Register component
+import Register from "./pages/Auth/Register.jsx"; // Register component
 
 // Importing user-related components
 import Profile from "./pages/User/Profile.jsx"; // Profile component
