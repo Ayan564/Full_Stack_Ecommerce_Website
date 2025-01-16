@@ -51,7 +51,7 @@ Full_Stack_Ecommerce_Website/
     |-- utils/
         |--- createToken.js
     |-- index.js
-  |- frontend
+  |- frontend/
     |-- /src
         |--- components/
             |---- CategoryForm.jsx
