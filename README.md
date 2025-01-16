@@ -140,6 +140,7 @@ Full_Stack_Ecommerce_Website/
 2. Clone this repository to your local machine.
 3. Create `.env` file in the root directory.
 4. Add the following environment variables to `.env`:
+5. Create a `uploads` folder in the root directory.
 
 ```bash
 # .env
